@@ -9,12 +9,14 @@ using System.Text;
 using Utils;
 using System.Threading;
 using System.Threading.Tasks;
+using EncodingDelection;
+using System.Diagnostics;
 
 namespace FileEncodingTool
 {
     public partial class main : Form
-    {
-        public List<string> PresetSuffix = new List<string>() { ".php", ".css", ".js", ".html", ".htm", ".txt", ".json" };        
+    {           
+        string presetSuffixTxt = ".php|.css|.js|.html|.htm|.txt|.json|.aspx|.cs|.asp";
         public main()
         {
             InitializeComponent();
@@ -22,9 +24,7 @@ namespace FileEncodingTool
 
         private void main_Load(object sender, EventArgs e)
         {            
-            PresetSuffixList.DataSource = PresetSuffix;
-            for (int j = 0; j < PresetSuffixList.Items.Count; j++)
-                PresetSuffixList.SetItemChecked(j, true);
+            PresetSuffix.Text = presetSuffixTxt;
         }
 
         private async void FolderSelectBtn_Click(object sender, EventArgs e)
@@ -54,12 +54,8 @@ namespace FileEncodingTool
         {
 
             DirectoryInfo rootInfo = new DirectoryInfo(folderPath);            
-            var files = rootInfo.GetFiles("*.*", SearchOption.AllDirectories);
-            List<string> suffixs = new List<string>();
-            foreach (var item in PresetSuffixList.CheckedItems)
-            {
-                suffixs.Add(item.ToString());
-            }
+            var files = rootInfo.GetFiles("*.*", SearchOption.AllDirectories);            
+            List<string> suffixs = PresetSuffix.Text.Split('|').ToList();
             var filters = files.Where(x => suffixs.Contains(x.Extension.ToLower())).ToList();
             await addToListView(filters);
         }
@@ -68,7 +64,11 @@ namespace FileEncodingTool
         {            
             foreach (var file in files)
             {
-                FileEncoding fileEncoding = EncodingDetect.IsTextUTF8(file.FullName);
+                //FileEncoding fileEncoding = EncodingDetect.IsTextUTF8(file.FullName);
+
+                IdentifyEncoding identify = new EncodingDelection.IdentifyEncoding();
+                FileEncoding fileEncoding = identify.GetEncodingName(file);
+
                 if (!ImageListIcon.Images.Keys.Contains(file.Extension))
                 {
                     ImageListIcon.Images.Add(file.Extension, Icon.ExtractAssociatedIcon(file.FullName));

@@ -12,102 +12,102 @@ namespace Utils
             File.WriteAllText(fileName, fileContent, noBOMEncoding);
         }
     }
-    public class EncodingDetect
-    {
-        public static FileEncoding IsTextUTF8(string FILE_NAME)
-        {
-            FileEncoding encoding = new FileEncoding() { Encoding = Encoding.UTF8, UTF8BOM = false };
-            FileStream fs = new FileStream(FILE_NAME, FileMode.Open, FileAccess.Read);
-            BinaryReader r = new BinaryReader(fs);
-            int length;
-            int.TryParse(fs.Length.ToString(), out length);
-            byte[] inputStream = r.ReadBytes(length);
-            fs.Close();
-            r.Close();
+    //public class EncodingDetect
+    //{
+    //    public static FileEncoding IsTextUTF8(string FILE_NAME)
+    //    {
+    //        FileEncoding encoding = new FileEncoding() { Encoding = Encoding.UTF8, UTF8BOM = false };
+    //        FileStream fs = new FileStream(FILE_NAME, FileMode.Open, FileAccess.Read);
+    //        BinaryReader r = new BinaryReader(fs);
+    //        int length;
+    //        int.TryParse(fs.Length.ToString(), out length);
+    //        byte[] inputStream = r.ReadBytes(length);
+    //        fs.Close();
+    //        r.Close();
 
-            int encodingBytesCount = 0;
-            bool allTextsAreASCIIChars = true;
+    //        int encodingBytesCount = 0;
+    //        bool allTextsAreASCIIChars = true;
 
-            for (int i = 0; i < inputStream.Length; i++)
-            {
-                byte current = inputStream[i];
+    //        for (int i = 0; i < inputStream.Length; i++)
+    //        {
+    //            byte current = inputStream[i];
 
-                if ((current & 0x80) == 0x80)
-                {
-                    allTextsAreASCIIChars = false;
-                }
-                // First byte
-                if (encodingBytesCount == 0)
-                {
-                    if ((current & 0x80) == 0)
-                    {
-                        // ASCII chars, from 0x00-0x7F
-                        continue;
-                    }
+    //            if ((current & 0x80) == 0x80)
+    //            {
+    //                allTextsAreASCIIChars = false;
+    //            }
+    //            // First byte
+    //            if (encodingBytesCount == 0)
+    //            {
+    //                if ((current & 0x80) == 0)
+    //                {
+    //                    // ASCII chars, from 0x00-0x7F
+    //                    continue;
+    //                }
 
-                    if ((current & 0xC0) == 0xC0)
-                    {
-                        encodingBytesCount = 1;
-                        current <<= 2;
+    //                if ((current & 0xC0) == 0xC0)
+    //                {
+    //                    encodingBytesCount = 1;
+    //                    current <<= 2;
 
-                        // More than two bytes used to encoding a unicode char.
-                        // Calculate the real length.
-                        while ((current & 0x80) == 0x80)
-                        {
-                            current <<= 1;
-                            encodingBytesCount++;
-                        }
-                    }
-                    else
-                    {
-                        // Invalid bits structure for UTF8 encoding rule.
-                        encoding.Encoding = null;
-                        encoding.NoUTF8 = true;
-                        return encoding;
-                    }
-                }
-                else
-                {
-                    // Following bytes, must start with 10.
-                    if ((current & 0xC0) == 0x80)
-                    {
-                        encodingBytesCount--;
-                    }
-                    else
-                    {
-                        // Invalid bits structure for UTF8 encoding rule.
-                        encoding.Encoding = null;
-                        encoding.NoUTF8 = true;
-                        return encoding;
-                    }
-                }
-            }
+    //                    // More than two bytes used to encoding a unicode char.
+    //                    // Calculate the real length.
+    //                    while ((current & 0x80) == 0x80)
+    //                    {
+    //                        current <<= 1;
+    //                        encodingBytesCount++;
+    //                    }
+    //                }
+    //                else
+    //                {
+    //                    // Invalid bits structure for UTF8 encoding rule.
+    //                    encoding.Encoding = null;
+    //                    encoding.NoUTF8 = true;
+    //                    return encoding;
+    //                }
+    //            }
+    //            else
+    //            {
+    //                // Following bytes, must start with 10.
+    //                if ((current & 0xC0) == 0x80)
+    //                {
+    //                    encodingBytesCount--;
+    //                }
+    //                else
+    //                {
+    //                    // Invalid bits structure for UTF8 encoding rule.
+    //                    encoding.Encoding = null;
+    //                    encoding.NoUTF8 = true;
+    //                    return encoding;
+    //                }
+    //            }
+    //        }
 
-            if (encodingBytesCount != 0)
-            {
-                // Invalid bits structure for UTF8 encoding rule.
-                // Wrong following bytes count.
-                encoding.Encoding = null;
-                encoding.NoUTF8 = true;
-                return encoding;
-            }
+    //        if (encodingBytesCount != 0)
+    //        {
+    //            // Invalid bits structure for UTF8 encoding rule.
+    //            // Wrong following bytes count.
+    //            encoding.Encoding = null;
+    //            encoding.NoUTF8 = true;
+    //            return encoding;
+    //        }
 
-            // Although UTF8 supports encoding for ASCII chars, we regard as a input stream, whose contents are all ASCII as default encoding.
-            if (allTextsAreASCIIChars)
-            {
-                encoding.Encoding = null;
-                encoding.NoUTF8 = true;
-            }
-            else
-            {
-                if (inputStream[0] == 0xEF && inputStream[1] == 0xBB && inputStream[2] == 0xBF)
-                {
-                    encoding.UTF8BOM = true;
-                }
-            }
-            return encoding;
-        }
-    }
+    //        // Although UTF8 supports encoding for ASCII chars, we regard as a input stream, whose contents are all ASCII as default encoding.
+    //        if (allTextsAreASCIIChars)
+    //        {
+    //            encoding.Encoding = null;
+    //            encoding.NoUTF8 = true;
+    //        }
+    //        else
+    //        {
+    //            if (inputStream[0] == 0xEF && inputStream[1] == 0xBB && inputStream[2] == 0xBF)
+    //            {
+    //                encoding.UTF8BOM = true;
+    //            }
+    //        }
+    //        return encoding;
+    //    }
+    //}
     public class FileEncoding
     {
         public Encoding Encoding { get; set; }

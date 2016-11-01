@@ -30,7 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             this.ImageListIcon = new System.Windows.Forms.ImageList(this.components);
-            this.PresetSuffixList = new System.Windows.Forms.CheckedListBox();
             this.FolderBrowserDialogSelect = new System.Windows.Forms.FolderBrowserDialog();
             this.LabelDirectory = new System.Windows.Forms.Label();
             this.SelectedPath = new System.Windows.Forms.TextBox();
@@ -46,6 +45,8 @@
             this.LogOutput = new System.Windows.Forms.RichTextBox();
             this.ContextMenuStripRichText = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ToolStripMenuItemRichTextClear = new System.Windows.Forms.ToolStripMenuItem();
+            this.PresetSuffix = new System.Windows.Forms.TextBox();
+            this.LabelPresetSuffixTip = new System.Windows.Forms.Label();
             this.ContextMenuStripListView.SuspendLayout();
             this.ContextMenuStripRichText.SuspendLayout();
             this.SuspendLayout();
@@ -56,27 +57,10 @@
             this.ImageListIcon.ImageSize = new System.Drawing.Size(16, 16);
             this.ImageListIcon.TransparentColor = System.Drawing.Color.Transparent;
             // 
-            // PresetSuffixList
-            // 
-            this.PresetSuffixList.BackColor = System.Drawing.SystemColors.Menu;
-            this.PresetSuffixList.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.PresetSuffixList.CausesValidation = false;
-            this.PresetSuffixList.FormattingEnabled = true;
-            this.PresetSuffixList.HorizontalScrollbar = true;
-            this.PresetSuffixList.Items.AddRange(new object[] {
-            ".php",
-            ".css",
-            ".js"});
-            this.PresetSuffixList.Location = new System.Drawing.Point(71, 20);
-            this.PresetSuffixList.MultiColumn = true;
-            this.PresetSuffixList.Name = "PresetSuffixList";
-            this.PresetSuffixList.Size = new System.Drawing.Size(401, 48);
-            this.PresetSuffixList.TabIndex = 1;
-            // 
             // LabelDirectory
             // 
             this.LabelDirectory.AutoSize = true;
-            this.LabelDirectory.Location = new System.Drawing.Point(12, 91);
+            this.LabelDirectory.Location = new System.Drawing.Point(24, 69);
             this.LabelDirectory.Name = "LabelDirectory";
             this.LabelDirectory.Size = new System.Drawing.Size(41, 12);
             this.LabelDirectory.TabIndex = 2;
@@ -84,16 +68,15 @@
             // 
             // SelectedPath
             // 
-            this.SelectedPath.Location = new System.Drawing.Point(71, 87);
+            this.SelectedPath.Location = new System.Drawing.Point(71, 65);
             this.SelectedPath.Name = "SelectedPath";
             this.SelectedPath.Size = new System.Drawing.Size(309, 21);
             this.SelectedPath.TabIndex = 3;
-            this.SelectedPath.Text = "E:\\piwik\\config\\test";
             this.SelectedPath.KeyUp += new System.Windows.Forms.KeyEventHandler(this.SelectedPath_KeyUp);
             // 
             // FolderSelectBtn
             // 
-            this.FolderSelectBtn.Location = new System.Drawing.Point(397, 86);
+            this.FolderSelectBtn.Location = new System.Drawing.Point(397, 64);
             this.FolderSelectBtn.Name = "FolderSelectBtn";
             this.FolderSelectBtn.Size = new System.Drawing.Size(75, 23);
             this.FolderSelectBtn.TabIndex = 4;
@@ -104,7 +87,7 @@
             // LabelSuffix
             // 
             this.LabelSuffix.AutoSize = true;
-            this.LabelSuffix.Location = new System.Drawing.Point(14, 39);
+            this.LabelSuffix.Location = new System.Drawing.Point(12, 15);
             this.LabelSuffix.Name = "LabelSuffix";
             this.LabelSuffix.Size = new System.Drawing.Size(53, 12);
             this.LabelSuffix.TabIndex = 5;
@@ -125,9 +108,9 @@
             this.FilteredFiles.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.FilteredFiles.HideSelection = false;
             this.FilteredFiles.LargeImageList = this.ImageListIcon;
-            this.FilteredFiles.Location = new System.Drawing.Point(12, 129);
+            this.FilteredFiles.Location = new System.Drawing.Point(12, 106);
             this.FilteredFiles.Name = "FilteredFiles";
-            this.FilteredFiles.Size = new System.Drawing.Size(760, 343);
+            this.FilteredFiles.Size = new System.Drawing.Size(760, 366);
             this.FilteredFiles.SmallImageList = this.ImageListIcon;
             this.FilteredFiles.TabIndex = 7;
             this.FilteredFiles.UseCompatibleStateImageBehavior = false;
@@ -196,18 +179,35 @@
             this.ToolStripMenuItemRichTextClear.Text = "清空";
             this.ToolStripMenuItemRichTextClear.Click += new System.EventHandler(this.ToolStripMenuItemRichTextClear_Click);
             // 
+            // PresetSuffix
+            // 
+            this.PresetSuffix.Location = new System.Drawing.Point(71, 12);
+            this.PresetSuffix.Name = "PresetSuffix";
+            this.PresetSuffix.Size = new System.Drawing.Size(701, 21);
+            this.PresetSuffix.TabIndex = 9;
+            // 
+            // LabelPresetSuffixTip
+            // 
+            this.LabelPresetSuffixTip.AutoSize = true;
+            this.LabelPresetSuffixTip.Location = new System.Drawing.Point(71, 40);
+            this.LabelPresetSuffixTip.Name = "LabelPresetSuffixTip";
+            this.LabelPresetSuffixTip.Size = new System.Drawing.Size(125, 12);
+            this.LabelPresetSuffixTip.TabIndex = 10;
+            this.LabelPresetSuffixTip.Text = "多个文件后缀用｜分隔";
+            // 
             // main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 611);
+            this.Controls.Add(this.LabelPresetSuffixTip);
+            this.Controls.Add(this.PresetSuffix);
             this.Controls.Add(this.LogOutput);
             this.Controls.Add(this.FilteredFiles);
             this.Controls.Add(this.LabelSuffix);
             this.Controls.Add(this.FolderSelectBtn);
             this.Controls.Add(this.SelectedPath);
             this.Controls.Add(this.LabelDirectory);
-            this.Controls.Add(this.PresetSuffixList);
             this.Name = "main";
             this.Text = "文件编码处理器";
             this.Load += new System.EventHandler(this.main_Load);
@@ -219,7 +219,6 @@
         }
 
         #endregion
-        private System.Windows.Forms.CheckedListBox PresetSuffixList;
         private System.Windows.Forms.FolderBrowserDialog FolderBrowserDialogSelect;
         private System.Windows.Forms.Label LabelDirectory;
         private System.Windows.Forms.TextBox SelectedPath;
@@ -236,6 +235,8 @@
         private System.Windows.Forms.ContextMenuStrip ContextMenuStripListView;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemSave;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemOpen;
+        private System.Windows.Forms.TextBox PresetSuffix;
+        private System.Windows.Forms.Label LabelPresetSuffixTip;
     }
 }
 
