@@ -114,25 +114,25 @@ namespace FileEncodingTool
                 try
                 {
                     string fileContent = FileReader.ReadFileContent(fileName, Encoding.UTF8);
-                    FileOperator.Save(fileName, fileContent);                
-                    processingLog("\r\n文件：" + fileName + "保存成功");
+                    FileOperator.Save(fileName, fileContent);
+                    await processingLog("\r\n文件：" + fileName + "保存成功");
                 }
                 catch (Exception ex)
                 {
-                    processingLog("\r\n文件：" + fileName + "保存失败");
-                    processingLog("\r\nError：" + ex.Message);                    
+                    await processingLog("\r\n文件：" + fileName + "保存失败");
+                    await processingLog("\r\nError：" + ex.Message);                    
                 }
                 await Task.Delay(0);
             }
-            processingLog("\r\n本次操作完成--------------------------------------------------------------------------------------------------------------");
+            await processingLog("\r\n本次操作完成--------------------------------------------------------------------------------------------------------------");
             
         }
 
-        private void ToolStripMenuItemRichTextClear_Click(object sender, EventArgs e)
+        private async void ToolStripMenuItemRichTextClear_Click(object sender, EventArgs e)
         {
-            processingLog("", true);
+           await processingLog("", true);
         }
-        void processingLog(string txt,bool clear=false)
+        async Task processingLog(string txt, bool clear = false)
         {
             if (clear)
             {
@@ -140,7 +140,7 @@ namespace FileEncodingTool
                 return;
             }
             LogOutput.Text += txt;
-            
+            await Task.Delay(0);
         }
 
         private void LogOutput_TextChanged(object sender, EventArgs e)
@@ -151,7 +151,6 @@ namespace FileEncodingTool
 
         private void ContextMenuStripListView_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
-
             if (FilteredFiles.SelectedItems.Count <= 0) e.Cancel = true;
             ContextMenuStrip cms = (ContextMenuStrip)sender;
             var items = cms.Items.Find("Open_ToolStripMenuItem", false);
