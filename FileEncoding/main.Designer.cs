@@ -132,6 +132,7 @@
             this.FilteredFiles.TabIndex = 7;
             this.FilteredFiles.UseCompatibleStateImageBehavior = false;
             this.FilteredFiles.View = System.Windows.Forms.View.Details;
+            this.FilteredFiles.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.FilteredFiles_MouseDoubleClick);
             // 
             // columnHeaderFileName
             // 

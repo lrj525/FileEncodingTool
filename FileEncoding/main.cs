@@ -83,7 +83,7 @@ namespace FileEncodingTool
                 }
                 else
                 {
-                    item.SubItems.Add("非 UTF-8");
+                    item.SubItems.Add("非UTF8或不明确");
                 }
                 if (fileEncoding.NoUTF8 || fileEncoding.UTF8BOM)
                 {
@@ -94,7 +94,7 @@ namespace FileEncodingTool
                 FilteredFiles.Items.Add(item);
                 FilteredFiles.EndUpdate();
                 FilteredFiles.Items[FilteredFiles.Items.Count - 1].EnsureVisible();
-                await Task.Delay(1);
+                await Task.Delay(0);
             }
         }
         private async void SelectedPath_KeyUp(object sender, KeyEventArgs e)
@@ -176,6 +176,13 @@ namespace FileEncodingTool
         {
             var selectedItem = FilteredFiles.SelectedItems[0];            
             FileView view = new FileView(selectedItem.Text);            
+            view.Show();
+        }
+
+        private void FilteredFiles_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            var selectedItem = FilteredFiles.FocusedItem;
+            FileView view = new FileView(selectedItem.Text);
             view.Show();
         }
     }
