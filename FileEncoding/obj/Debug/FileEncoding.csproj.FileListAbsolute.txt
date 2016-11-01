@@ -1,0 +1,12 @@
+E:\FileEncoding\FileEncoding\FileEncoding\bin\Debug\FileEncoding.exe.config
+E:\FileEncoding\FileEncoding\FileEncoding\bin\Debug\FileEncoding.exe
+E:\FileEncoding\FileEncoding\FileEncoding\bin\Debug\FileEncoding.pdb
+E:\FileEncoding\FileEncoding\FileEncoding\bin\Debug\System.Net.Http.dll
+E:\FileEncoding\FileEncoding\FileEncoding\bin\Debug\System.Net.Http.xml
+E:\FileEncoding\FileEncoding\FileEncoding\bin\Debug\zh-Hans\System.Net.Http.resources.dll
+E:\FileEncoding\FileEncoding\FileEncoding\obj\Debug\FileEncoding.csprojResolveAssemblyReference.cache
+E:\FileEncoding\FileEncoding\FileEncoding\obj\Debug\FileEncoding.Properties.Resources.resources
+E:\FileEncoding\FileEncoding\FileEncoding\obj\Debug\FileEncoding.csproj.GenerateResource.Cache
+E:\FileEncoding\FileEncoding\FileEncoding\obj\Debug\FileEncoding.exe
+E:\FileEncoding\FileEncoding\FileEncoding\obj\Debug\FileEncoding.pdb
+E:\FileEncoding\FileEncoding\FileEncoding\obj\Debug\FileEncoding.main.resources

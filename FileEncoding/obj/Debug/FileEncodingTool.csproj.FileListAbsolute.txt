@@ -1,0 +1,13 @@
+E:\FileEncoding\FileEncoding\FileEncoding\bin\Debug\FileEncodingTool.exe.config
+E:\FileEncoding\FileEncoding\FileEncoding\bin\Debug\FileEncodingTool.exe
+E:\FileEncoding\FileEncoding\FileEncoding\bin\Debug\FileEncodingTool.pdb
+E:\FileEncoding\FileEncoding\FileEncoding\obj\Debug\FileEncodingTool.main.resources
+E:\FileEncoding\FileEncoding\FileEncoding\obj\Debug\FileEncodingTool.Properties.Resources.resources
+E:\FileEncoding\FileEncoding\FileEncoding\obj\Debug\FileEncodingTool.csproj.GenerateResource.Cache
+E:\FileEncoding\FileEncoding\FileEncoding\obj\Debug\FileEncodingTool.exe
+E:\FileEncoding\FileEncoding\FileEncoding\obj\Debug\FileEncodingTool.pdb
+E:\FileEncoding\FileEncoding\FileEncoding\obj\Debug\FileEncodingTool.csprojResolveAssemblyReference.cache
+E:\FileEncoding\FileEncoding\FileEncoding\obj\Debug\FileEncodingTool.FileView.resources
+E:\FileEncodingTool\FileEncoding\bin\Debug\FileEncodingTool.exe.config
+E:\FileEncodingTool\FileEncoding\obj\Debug\FileEncodingTool.exe
+E:\FileEncodingTool\FileEncoding\obj\Debug\FileEncodingTool.pdb
