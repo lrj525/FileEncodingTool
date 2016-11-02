@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using Utils;
 
@@ -116,9 +117,32 @@ namespace EncodingDelection
                     chinesefile.Close();
                 }
             }
+            var enc = Encoding.Default;
+            if (rawtext.Length == 0)
+            {
+               return new FileEncoding() { Encoding = enc, NoUTF8 = true, UTF8BOM = false };
+            }
+            string encodingName = GetEncodingName(rawtext);
            
-            string encodingName= GetEncodingName(rawtext);
-            FileEncoding fileEncoding = new FileEncoding() { Encoding = Encoding.GetEncoding(encodingName), NoUTF8 = true, UTF8BOM = false };
+            if (encodingName != "OTHER")
+            {
+                if (encodingName == "CNS 11643")
+                {
+                    enc = Encoding.GetEncoding(20000);
+                }
+                else if (encodingName == "HZ")
+                {
+                    enc = Encoding.GetEncoding(52936);
+                }
+                else if (encodingName == "ISO 2022CN") {
+                    enc = Encoding.GetEncoding(50227);
+                }
+                else
+                {
+                    enc = Encoding.GetEncoding(encodingName);
+                }
+            }
+            FileEncoding fileEncoding = new FileEncoding() { Encoding = enc, NoUTF8 = true, UTF8BOM = false };
             if (encodingName == "UTF-8")
             {
                 fileEncoding.NoUTF8 = false;

@@ -47,6 +47,8 @@
             this.ToolStripMenuItemRichTextClear = new System.Windows.Forms.ToolStripMenuItem();
             this.PresetSuffix = new System.Windows.Forms.TextBox();
             this.LabelPresetSuffixTip = new System.Windows.Forms.Label();
+            this.CheckBoxFilterBOM = new System.Windows.Forms.CheckBox();
+            this.ButtonRefresh = new System.Windows.Forms.Button();
             this.ContextMenuStripListView.SuspendLayout();
             this.ContextMenuStripRichText.SuspendLayout();
             this.SuspendLayout();
@@ -72,6 +74,7 @@
             this.SelectedPath.Name = "SelectedPath";
             this.SelectedPath.Size = new System.Drawing.Size(309, 21);
             this.SelectedPath.TabIndex = 3;
+            this.SelectedPath.Text = "E:\\juniu\\init-juniv\\backend";
             this.SelectedPath.KeyUp += new System.Windows.Forms.KeyEventHandler(this.SelectedPath_KeyUp);
             // 
             // FolderSelectBtn
@@ -195,11 +198,34 @@
             this.LabelPresetSuffixTip.TabIndex = 10;
             this.LabelPresetSuffixTip.Text = "多个文件后缀用｜分隔";
             // 
+            // CheckBoxFilterBOM
+            // 
+            this.CheckBoxFilterBOM.AutoSize = true;
+            this.CheckBoxFilterBOM.Location = new System.Drawing.Point(678, 67);
+            this.CheckBoxFilterBOM.Name = "CheckBoxFilterBOM";
+            this.CheckBoxFilterBOM.Size = new System.Drawing.Size(90, 16);
+            this.CheckBoxFilterBOM.TabIndex = 11;
+            this.CheckBoxFilterBOM.Text = "只显示带BOM";
+            this.CheckBoxFilterBOM.UseVisualStyleBackColor = true;
+            this.CheckBoxFilterBOM.CheckedChanged += new System.EventHandler(this.CheckBoxFilterBOM_CheckedChanged);
+            // 
+            // ButtonRefresh
+            // 
+            this.ButtonRefresh.Location = new System.Drawing.Point(479, 65);
+            this.ButtonRefresh.Name = "ButtonRefresh";
+            this.ButtonRefresh.Size = new System.Drawing.Size(75, 23);
+            this.ButtonRefresh.TabIndex = 12;
+            this.ButtonRefresh.Text = "刷新";
+            this.ButtonRefresh.UseVisualStyleBackColor = true;
+            this.ButtonRefresh.Click += new System.EventHandler(this.ButtonRefresh_Click);
+            // 
             // main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 611);
+            this.Controls.Add(this.ButtonRefresh);
+            this.Controls.Add(this.CheckBoxFilterBOM);
             this.Controls.Add(this.LabelPresetSuffixTip);
             this.Controls.Add(this.PresetSuffix);
             this.Controls.Add(this.LogOutput);
@@ -237,6 +263,8 @@
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemOpen;
         private System.Windows.Forms.TextBox PresetSuffix;
         private System.Windows.Forms.Label LabelPresetSuffixTip;
+        private System.Windows.Forms.CheckBox CheckBoxFilterBOM;
+        private System.Windows.Forms.Button ButtonRefresh;
     }
 }
 

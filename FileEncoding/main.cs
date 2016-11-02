@@ -15,15 +15,17 @@ using System.Diagnostics;
 namespace FileEncodingTool
 {
     public partial class main : Form
-    {           
+    {
         string presetSuffixTxt = ".php|.css|.js|.html|.htm|.txt|.json|.aspx|.cs|.asp";
+        public List<ListObj> ListObj { get; set; }
+        public List<ListObj> VisibleListObj { get; set; }
         public main()
         {
             InitializeComponent();
         }
 
         private void main_Load(object sender, EventArgs e)
-        {            
+        {
             PresetSuffix.Text = presetSuffixTxt;
         }
 
@@ -33,7 +35,7 @@ namespace FileEncodingTool
             if (dialogResult == DialogResult.OK)
             {
                 SelectedPath.Text = FolderBrowserDialogSelect.SelectedPath;
-               await processFiles(SelectedPath.Text);
+                await processFiles(SelectedPath.Text);
             }
         }
 
@@ -46,62 +48,91 @@ namespace FileEncodingTool
             }
             else
             {
-                FilteredFiles.Items.Clear();
                 await filterFile(folderPath);
             }
         }
         async Task filterFile(string folderPath)
         {
-
-            DirectoryInfo rootInfo = new DirectoryInfo(folderPath);            
-            var files = rootInfo.GetFiles("*.*", SearchOption.AllDirectories);            
+            
+            DirectoryInfo rootInfo = new DirectoryInfo(folderPath);
+            var files = rootInfo.GetFiles("*.*", SearchOption.AllDirectories);
             List<string> suffixs = PresetSuffix.Text.Split('|').ToList();
             var filters = files.Where(x => suffixs.Contains(x.Extension.ToLower())).ToList();
-            await addToListView(filters);
-        }
-
-        async Task addToListView(List<FileInfo> files)
-        {            
-            foreach (var file in files)
+            ListObj = new List<ListObj>();
+            VisibleListObj = new List<ListObj>();
+            IdentifyEncoding identify = new EncodingDelection.IdentifyEncoding();
+            var all = filters.Select(file =>
             {
-                //FileEncoding fileEncoding = EncodingDetect.IsTextUTF8(file.FullName);
-
-                IdentifyEncoding identify = new EncodingDelection.IdentifyEncoding();
-                FileEncoding fileEncoding = identify.GetEncodingName(file);
-
+                FileEncoding fileEncoding = new Utils.FileEncoding() { Encoding = Encoding.Default, NoUTF8 = true, UTF8BOM = false };
+                try
+                {
+                    fileEncoding = identify.GetEncodingName(file);
+                }
+                catch (Exception ex)
+                {
+                    LogConsole.Log(ex.Message);
+                }
                 if (!ImageListIcon.Images.Keys.Contains(file.Extension))
                 {
                     ImageListIcon.Images.Add(file.Extension, Icon.ExtractAssociatedIcon(file.FullName));
                 }
-                var item = new ListViewItem();
-                item.ImageIndex = ImageListIcon.Images.Keys.IndexOf(file.Extension);
-                item.ToolTipText = item.Text = file.FullName;
-                item.Tag = file.FullName;
-                if (fileEncoding.Encoding != null)
+                return new ListObj()
                 {
-                    item.SubItems.Add(fileEncoding.Encoding.EncodingName);
+                    Encoding = fileEncoding.Encoding,
+                    FileName = file.FullName,
+                    ImageIndex = ImageListIcon.Images.Keys.IndexOf(file.Extension),
+                    NoUTF8 = fileEncoding.NoUTF8,
+                    UTF8BOM = fileEncoding.UTF8BOM
+                };
+
+            }).ToList<ListObj>();
+            CheckBoxFilterBOM.Checked = false;
+            ListObj.AddRange(all);
+            VisibleListObj.AddRange(all);
+            await addToListView(VisibleListObj);
+        }
+
+        async Task addToListView(List<ListObj> objs)
+        {
+            FilteredFiles.Items.Clear();
+            await Task.Delay(0);
+            int count = 0;
+            foreach (var obj in objs)
+            {
+                var item = new ListViewItem();
+                item.ImageIndex = obj.ImageIndex;
+                item.ToolTipText = item.Text = obj.FileName;
+                item.Tag = obj.FileName;
+                if (obj.Encoding != null)
+                {
+                    item.SubItems.Add(obj.Encoding.EncodingName);
                 }
                 else
                 {
                     item.SubItems.Add("非UTF8或不明确");
                 }
-                if (fileEncoding.NoUTF8 || fileEncoding.UTF8BOM)
+                if (obj.NoUTF8 || obj.UTF8BOM)
                 {
                     item.ForeColor = Color.Red;
                 }
-                item.SubItems.Add(fileEncoding.UTF8BOM ? "带签名" : "");
+                item.SubItems.Add(obj.UTF8BOM ? "带签名" : "");
                 FilteredFiles.BeginUpdate();
                 FilteredFiles.Items.Add(item);
                 FilteredFiles.EndUpdate();
                 FilteredFiles.Items[FilteredFiles.Items.Count - 1].EnsureVisible();
-                await Task.Delay(0);
+                count++;
+                if (count % 20 == 0)
+                {
+                   await Task.Delay(1);
+                }
             }
+
         }
         private async void SelectedPath_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-               await processFiles(SelectedPath.Text);
+                await processFiles(SelectedPath.Text);
             }
         }
 
@@ -120,17 +151,17 @@ namespace FileEncodingTool
                 catch (Exception ex)
                 {
                     await processingLog("\r\n文件：" + fileName + "保存失败");
-                    await processingLog("\r\nError：" + ex.Message);                    
+                    await processingLog("\r\nError：" + ex.Message);
                 }
                 await Task.Delay(0);
             }
             await processingLog("\r\n本次操作完成--------------------------------------------------------------------------------------------------------------");
-            
+
         }
 
         private async void ToolStripMenuItemRichTextClear_Click(object sender, EventArgs e)
         {
-           await processingLog("", true);
+            await processingLog("", true);
         }
         async Task processingLog(string txt, bool clear = false)
         {
@@ -174,8 +205,8 @@ namespace FileEncodingTool
 
         private void ToolStripMenuItemOpen_Click(object sender, EventArgs e)
         {
-            var selectedItem = FilteredFiles.SelectedItems[0];            
-            FileView view = new FileView(selectedItem.Text);            
+            var selectedItem = FilteredFiles.SelectedItems[0];
+            FileView view = new FileView(selectedItem.Text);
             view.Show();
         }
 
@@ -185,8 +216,36 @@ namespace FileEncodingTool
             FileView view = new FileView(selectedItem.Text);
             view.Show();
         }
+
+        private async void CheckBoxFilterBOM_CheckedChanged(object sender, EventArgs e)
+        {
+            VisibleListObj.Clear();
+
+            if (CheckBoxFilterBOM.Checked)
+            {
+                VisibleListObj.AddRange(ListObj.Where(x => x.UTF8BOM).ToList());
+            }
+            else
+            {
+                VisibleListObj.AddRange(ListObj);
+            }
+            await addToListView(VisibleListObj);
+        }
+
+        private async void ButtonRefresh_Click(object sender, EventArgs e)
+        {
+            await processFiles(SelectedPath.Text);
+        }
     }
 
+    public class ListObj
+    {
+        public string FileName { get; set; }
+        public Encoding Encoding { get; set; }
+        public bool UTF8BOM { get; set; }
+        public bool NoUTF8 { get; set; }
+        public int ImageIndex { get; set; }
+    }
 
 }
 

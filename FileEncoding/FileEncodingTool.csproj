@@ -71,6 +71,7 @@
     <Compile Include="FileView.Designer.cs">
       <DependentUpon>FileView.cs</DependentUpon>
     </Compile>
+    <Compile Include="LogConsole.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="main.cs">
       <SubType>Form</SubType>
