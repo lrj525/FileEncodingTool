@@ -16,7 +16,7 @@ namespace FileEncodingTool
 {
     public partial class main : Form
     {
-        string presetSuffixTxt = ".php|.css|.js|.html|.htm|.txt|.json|.aspx|.cs|.asp";
+        string presetSuffixTxt = ".php|.css|.js|.html|.htm|.txt|.json|.aspx|.cs|.asp|.wxss|.wxml";
         public List<ListObj> ListObj { get; set; }
         public List<ListObj> VisibleListObj { get; set; }
         public main()
@@ -144,7 +144,7 @@ namespace FileEncodingTool
                 string fileName = item.Tag as string;
                 try
                 {
-                    string fileContent = FileReader.ReadFileContent(fileName, Encoding.UTF8);
+                    string fileContent = FileReader.ReadFileContent(fileName, Encoding.Default);
                     FileOperator.Save(fileName, fileContent);
                     await processingLog("\r\n文件：" + fileName + "保存成功");
                 }

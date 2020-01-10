@@ -27,7 +27,7 @@ namespace FileEncodingTool
 
         private void FileView_Load(object sender, EventArgs e)
         {
-            string fileContent = FileReader.ReadFileContent(FileName, Encoding.UTF8);
+            string fileContent = FileReader.ReadFileContent(FileName, Encoding.Default);
             RichTextBoxFileContent.Tag = true;
             RichTextBoxFileContent.Text =  fileContent;
             PreviousContent = RichTextBoxFileContent.Text;
