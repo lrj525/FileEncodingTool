@@ -16,7 +16,7 @@ namespace FileEncodingTool
 {
     public partial class main : Form
     {
-        string presetSuffixTxt = ".php|.css|.js|.html|.htm|.txt|.json|.aspx|.cs|.asp|.wxss|.wxml";
+        string presetSuffixTxt = ".php|.css|.js|.html|.htm|.txt|.json|.aspx|.cs|.asp|.wxss|.wxml|.ini";
         public List<ListObj> ListObj { get; set; }
         public List<ListObj> VisibleListObj { get; set; }
         public main()
@@ -56,8 +56,30 @@ namespace FileEncodingTool
             
             DirectoryInfo rootInfo = new DirectoryInfo(folderPath);
             var files = rootInfo.GetFiles("*.*", SearchOption.AllDirectories);
+
+            //排除指定目录
+            //excludeDir
+            List<string> excludeDirs = excludeDir.Text.Split('|').ToList();
+            var reExcludeDirs = excludeDirs.Select(dir =>
+            {
+                char[] re = new char[]{ '/','\\'};
+                string path= System.IO.Path.Combine(rootInfo.FullName, dir).TrimEnd(re)+@"\";
+                return path;
+            });
+            var exfilters = files.Where((x) =>
+            {
+                string fullName = x.FullName;
+                foreach (string exdir in reExcludeDirs)
+                {
+                    if (fullName.Contains(exdir))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }).ToList();
             List<string> suffixs = PresetSuffix.Text.Split('|').ToList();
-            var filters = files.Where(x => suffixs.Contains(x.Extension.ToLower())).ToList();
+            var filters = exfilters.Where(x => suffixs.Contains(x.Extension.ToLower())).ToList();
             ListObj = new List<ListObj>();
             VisibleListObj = new List<ListObj>();
             IdentifyEncoding identify = new EncodingDelection.IdentifyEncoding();
@@ -87,6 +109,7 @@ namespace FileEncodingTool
 
             }).ToList<ListObj>();
             CheckBoxFilterBOM.Checked = false;
+            CheckBoxFilterGbk.Checked = false;
             ListObj.AddRange(all);
             VisibleListObj.AddRange(all);
             await addToListView(VisibleListObj);
@@ -235,6 +258,24 @@ namespace FileEncodingTool
         private async void ButtonRefresh_Click(object sender, EventArgs e)
         {
             await processFiles(SelectedPath.Text);
+        }
+
+        private async void CheckBoxFilterGbk_CheckedChanged(object sender, EventArgs e)
+        {
+            VisibleListObj.Clear();
+
+            if (CheckBoxFilterGbk.Checked)
+            {
+                //VisibleListObj.AddRange(ListObj.Where(x => x.UTF8BOM).ToList());
+                VisibleListObj.AddRange(ListObj.Where((x) => {
+                    return x.Encoding.EncodingName.Contains("简体中文");                    
+                }).ToList());
+            }
+            else
+            {
+                VisibleListObj.AddRange(ListObj);
+            }
+            await addToListView(VisibleListObj);
         }
     }
 
